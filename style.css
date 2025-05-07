@@ -1,0 +1,520 @@
+/* 新添加的全局样式 */
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+} 
+
+body { 
+    font-family: 'Segoe UI', Arial, sans-serif; 
+    line-height: 1.6; 
+    color: #fff; 
+    background: #0a0f2d; 
+    overflow-x: hidden; 
+} 
+
+nav { 
+    position: fixed; 
+    top: 0; 
+    width: 100%; 
+    background: rgba(10, 15, 45, 0.9); 
+    backdrop-filter: blur(10px); 
+    z-index: 1000; 
+} 
+
+nav ul { 
+    display: flex; 
+    justify-content: center; 
+    padding: 1rem; 
+} 
+
+nav li { 
+    list-style: none; 
+    margin: 0 2rem; 
+} 
+
+nav a { 
+    color: #4dabf7; 
+    text-decoration: none; 
+    font-size: 1.1rem; 
+    transition: color 0.3s; 
+} 
+
+nav a:hover { 
+    color: #74c0fc; 
+} 
+
+section { 
+    min-height: 100vh; 
+    padding: 6rem 2rem 2rem; 
+    position: relative; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    transition: transform 0.3s; 
+} 
+
+#home { 
+    text-align: center; 
+} 
+
+#home img { 
+    width: min(80vw, 600px); 
+    margin-top: 3rem; 
+    filter: drop-shadow(0 0 20px rgba(77, 171, 247, 0.4)); 
+} 
+
+#countdown { 
+    background: linear-gradient(45deg, #1a1f4d, #0a0f2d); 
+    text-align: center; 
+} 
+
+#countdown-timer { 
+    font-size: 3rem; 
+    color: #ff6b6b; 
+    margin-top: 1rem; 
+    text-shadow: 0 0 15px rgba(255, 107, 107, 0.5); 
+} 
+
+.download-option { 
+    position: relative; 
+    margin: 1.5rem 0; 
+} 
+
+button { 
+    padding: 1rem 2rem; 
+    font-size: 1.2rem; 
+    border: none; 
+    border-radius: 8px; 
+    background: #1e3a8a; 
+    color: white; 
+    cursor: pointer; 
+    transition: all 0.3s; 
+    display: flex; 
+    align-items: center; 
+    gap: 0.8rem; 
+} 
+
+button:hover { 
+    background: #2563eb; 
+    transform: translateY(-2px); 
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); 
+} 
+
+button:disabled { 
+    background: #475569; 
+    cursor: not-allowed; 
+} 
+
+#download-overlay { 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: rgba(0, 0, 0, 0.8); 
+    display: none; 
+    justify-content: center; 
+    align-items: center; 
+    z-index: 9999; 
+} 
+
+.progress-bar { 
+    width: 300px; 
+    height: 20px; 
+    background: #1e293b; 
+    border-radius: 10px; 
+    overflow: hidden; 
+} 
+
+.progress { 
+    width: 0%; 
+    height: 100%; 
+    background: linear-gradient(90deg, #3b82f6, #60a5fa); 
+    transition: width 0.3s ease; 
+} 
+
+footer { 
+    text-align: center; 
+    padding: 2rem; 
+    background: #1a1f4d; 
+    color: #94a3b8; 
+}
+
+/* 星辰背景 */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><circle cx="50%" cy="50%" r="50%" fill="none" stroke="white" stroke-width="0.5"/><circle cx="10%" cy="20%" r="0.5" fill="white"/><circle cx="30%" cy="70%" r="0.3" fill="white"/><circle cx="80%" cy="40%" r="0.2" fill="white"/></svg>');
+    background-size: cover;
+    z-index: -1;
+    animation: starTwinkle 5s infinite alternate;
+}
+
+@keyframes starTwinkle {
+    from { opacity: 0.5; }
+    to { opacity: 1; }
+}
+
+nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul li {
+    margin: 0 20px;
+}
+
+nav ul li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+nav ul li a:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+section {
+    /* 让子元素在水平和垂直方向居中 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* 确保 body 至少占据整个视口高度 */
+    min-height: 100vh; 
+    transform: translateY(var(--parallax-offset, 0px));
+    will-change: transform;
+    transition: transform 0.3s ease-out;
+
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+nav {
+    /* 确保导航栏宽度 100% 且覆盖整个顶部 */
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+section {
+    /* 确保每个 section 内元素居中 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+}
+
+h1, h2, p {
+    /* 让字体更清晰大气 */
+    font-family: 'Microsoft YaHei', sans-serif; 
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    line-height: 1.5;
+}
+
+.download-option {
+    /* 下载选项居中 */
+    width: 100%;
+}
+
+footer {
+    /* 页脚宽度 100% */
+    width: 100%;
+}
+
+.download-option button {
+    /* 统一并设计科幻风格按钮 */
+    padding: 15px 30px;
+    background: linear-gradient(45deg, #007BFF, #0047AB);
+    color: white;
+    border: 2px solid #007BFF;
+    border-radius: 25px;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px #007BFF;
+}
+
+.download-option button:hover {
+    background: linear-gradient(45deg, #0047AB, #007BFF);
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px #007BFF;
+}
+
+#home img {
+    max-width: 500px;
+    width: 100%;
+}
+
+.download-option {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.download-option button {
+    /* 确保按钮本身有合适的宽度 */
+    min-width: 250px; 
+
+    text-align: center;
+}
+
+button {
+    padding: 10px 20px;
+    background: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+/* 添加遮罩层样式 */
+#download-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#download-overlay .progress-bar {
+    width: 60%;
+    max-width: 600px;
+    height: 40px;
+}
+
+/* 修改进度条容器样式 */
+.progress-bar {
+    background: #333;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    background: #007BFF;
+    width: 0%;
+    border-radius: 20px;
+    transition: width 0.3s ease;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+#team h2 {
+    font-size: 48px; 
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px #007BFF, 0 0 20px #007BFF, 0 0 30px #007BFF;
+}
+
+#team p {
+    font-size: 24px; 
+    margin: 10px 0;
+}
+
+#home h1 {
+    /* 进一步增大标题字号 */
+    font-size: 80px; 
+    margin-bottom: 30px;
+    text-shadow: 0 0 15px #007BFF, 0 0 30px #007BFF, 0 0 45px #007BFF;
+}
+
+#team h2, #countdown h2 {
+    /* 增大制作团队和倒计时标题字号 */
+    font-size: 64px; 
+    margin-bottom: 30px;
+    text-shadow: 0 0 15px #007BFF, 0 0 30px #007BFF, 0 0 45px #007BFF;
+}
+
+#team p, #countdown p {
+    /* 增大制作团队和倒计时文字字号 */
+    font-size: 32px; 
+    margin: 15px 0;
+}
+
+.download-option button {
+    /* 增大下载按钮尺寸和字号 */
+    padding: 20px 40px;
+    font-size: 24px;
+    border-radius: 35px;
+}
+
+nav ul li a {
+    /* 增大导航栏文字尺寸 */
+    padding: 20px 24px;
+    font-size: 20px;
+}
+
+.progress-bar {
+    /* 增大进度条尺寸 */
+    width: 400px;
+    height: 30px;
+}
+
+#home p {
+    border: 3px solid #007BFF;
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 80%;
+    margin-top: 20px;
+    box-shadow: 0 0 10px #007BFF;
+}
+
+#team p {
+    border: 3px solid #007BFF;
+    border-radius: 10px;
+    padding: 40px;
+    max-width: 80%;
+    box-shadow: 0 0 10px #007BFF;
+}
+.download-option button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.download-option button i {
+    font-size: 24px;
+}
+.download-option button img {
+    width: 30px;
+    height: 30px;
+}
+
+/* 定义浮出动画 */
+@keyframes floatIn {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 应用动画的类 */
+.float-in {
+    animation: floatIn 1s ease-out forwards;
+}
+
+/* 小屏幕手机（宽度小于 320px） */
+@media (max-width: 320px) {
+    h1 {
+        font-size: 36px !important;
+    }
+
+    h2 {
+        font-size: 28px !important;
+    }
+
+    p {
+        font-size: 16px !important;
+    }
+
+    nav ul li a {
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+
+    .download-option button {
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 20px;
+    }
+}
+
+/* 普通屏幕手机（宽度在 321px 到 480px 之间） */
+@media (min-width: 321px) and (max-width: 480px) {
+    h1 {
+        font-size: 48px !important;
+    }
+
+    h2 {
+        font-size: 36px !important;
+    }
+
+    p {
+        font-size: 18px !important;
+    }
+
+    nav ul li a {
+        padding: 12px 14px;
+        font-size: 16px;
+    }
+
+    .download-option button {
+        padding: 15px 30px;
+        font-size: 18px;
+        border-radius: 25px;
+    }
+}
+
+/* 大屏幕手机（宽度在 481px 到 768px 之间） */
+@media (min-width: 481px) and (max-width: 768px) {
+    h1 {
+        font-size: 64px !important;
+    }
+
+    h2 {
+        font-size: 48px !important;
+    }
+
+    p {
+        font-size: 24px !important;
+    }
+
+    nav ul li a {
+        padding: 16px 18px;
+        font-size: 18px;
+    }
+
+    .download-option button {
+        padding: 20px 40px;
+        font-size: 20px;
+        border-radius: 30px;
+    }
+}

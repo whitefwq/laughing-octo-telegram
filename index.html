@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>自我防御协议●2025</title>
+    <title>战略防御控制系统 DEFCON 1</title>
     <style>
         :root {
             --terminal-green: #00ff00;
@@ -21,7 +21,7 @@
         }
 
         .container {
-            max-width: 600px;
+            max-width: 1000px;
             margin: 0 auto;
         }
 
@@ -105,8 +105,80 @@
             box-shadow: 0 0 15px var(--terminal-green);
         }
 
+        .strategic-interface {
+            display: none;
+            margin-top: 20px;
+            border: 1px solid var(--terminal-green);
+            padding: 15px;
+        }
+
+        .control-panel {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 20px;
+            height: 500px;
+        }
+
+        .weapon-selector {
+            border-right: 2px solid var(--terminal-green);
+            padding-right: 15px;
+            overflow-y: auto;
+        }
+
+        .weapon-btn {
+            width: 100%;
+            margin: 8px 0;
+            padding: 12px;
+            background: #002200;
+            border: 1px solid var(--terminal-green);
+            color: var(--terminal-green);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .weapon-btn:hover {
+            background: #004400;
+            box-shadow: 0 0 10px var(--terminal-green);
+        }
+
+        .world-map {
+            position: relative;
+            background: #000 url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg"><path d="M20 25l15-5 10 8-5 12zM60 15l10 5-8 12-12-3z" fill="none" stroke="%2300ff00" stroke-width="0.5"/></svg>');
+            background-size: cover;
+            border: 1px solid var(--terminal-green);
+        }
+
+        .target-marker {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: var(--alert-red);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: target-pulse 1s infinite;
+        }
+
+        @keyframes target-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255,0,51,0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(255,0,51,0); }
+            100% { box-shadow: 0 0 0 0 rgba(255,0,51,0); }
+        }
+
         .hidden {
             display: none;
+        }
+
+        .final-confirm {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #001100;
+            border: 2px solid var(--alert-red);
+            padding: 20px;
+            z-index: 1000;
+            display: none;
+            text-align: center;
         }
     </style>
 </head>
@@ -114,22 +186,41 @@
     <div class="container">
         <div class="warning" id="warningHeader">
             <div class="status-indicator"></div>
-            <h2>防御协议系统 V2.2</h2>
-            <p>⚠️ 禁止随便使用 ⚠️</p>
+            <h2>战略防御控制系统 V4.0</h2>
+            <p>⚠️ 最高机密 - 仅限授权人员访问 ⚠️</p>
         </div>
         
         <div class="console-output" id="console"></div>
 
         <div id="inputInterface">
             <input type="password" id="inputField" 
-                   placeholder="输入验证码 (8位)" 
+                   placeholder="输入访问代码 (8位)" 
                    maxlength="8">
         </div>
 
         <div class="launch-interface" id="launchInterface">
-            <button class="launch-button" id="launchBtn">启动战略防御系统</button>
+            <button class="launch-button" id="launchBtn">激活战略指挥系统</button>
             <p>授权级别：Ω级</p>
             <p>验证状态：<span style="color:#0f0">已确认</span></p>
+        </div>
+
+        <div class="strategic-interface" id="strategicInterface">
+            <div class="control-panel">
+                <div class="weapon-selector" id="weaponPanel">
+                    <h3 style="color:#0f0">战略武器系统</h3>
+                </div>
+                <div class="world-map" id="worldMap"></div>
+            </div>
+        </div>
+
+        <div class="final-confirm" id="finalConfirm">
+            <h3 style="color:#ff0">最终发射确认</h3>
+            <input type="password" id="finalPassword" 
+                   placeholder="输入最终授权密码" 
+                   style="width: 200px; margin: 10px 0">
+            <br>
+            <button onclick="confirmLaunch()" class="weapon-btn">确认发射</button>
+            <button onclick="cancelLaunch()" class="weapon-btn">取消操作</button>
         </div>
     </div>
 
@@ -144,25 +235,36 @@
                 this.warningHeader = document.getElementById('warningHeader');
                 this.inputInterface = document.getElementById('inputInterface');
                 this.launchInterface = document.getElementById('launchInterface');
-                this.launchBtn = document.getElementById('launchBtn');
+                this.strategicInterface = document.getElementById('strategicInterface');
+                this.weaponPanel = document.getElementById('weaponPanel');
+                this.worldMap = document.getElementById('worldMap');
+                this.finalConfirm = document.getElementById('finalConfirm');
+                this.finalPassword = document.getElementById('finalPassword');
+                
+                this.weapons = [
+                    { name: '洲际弹道导弹', code: 'DF-41', range: '14,000km' },
+                    { name: '战略核潜艇', code: 'SSBN-096', range: '全球' },
+                    { name: '高超音速导弹', code: 'DF-ZF', range: '12,000km' },
+                    { name: '轨道打击系统', code: 'CSS-X-20', range: '近地轨道' }
+                ];
+
                 this.initEventListeners();
+                this.initWeaponButtons();
                 this.bootSequence();
             }
 
             initEventListeners() {
                 this.inputField.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        this.handleValidation();
-                    }
+                    if (e.key === 'Enter') this.handleValidation();
                 });
+                document.getElementById('launchBtn').addEventListener('click', () => this.initiateLaunchSequence());
             }
 
             bootSequence() {
-                this.print('<span class="console-line">初始化安全协议...</span>');
-                this.delayedPrint('正在验证国际安全证书...', 1000);
-                this.delayedPrint('连接指挥网络...', 2000);
-                this.delayedPrint('当前状态: <span style="color:#ff0">DEFCON 5</span>', 3000);
+                this.print('<span class="console-line">正在加载安全协议...</span>');
+                this.delayedPrint('验证生物特征识别...', 1000);
+                this.delayedPrint('连接战略指挥网络...', 2000);
+                this.delayedPrint('当前防御等级: <span style="color:#ff0">DEFCON 3</span>', 3000);
             }
 
             print(text) {
@@ -179,11 +281,11 @@
 
             async simulateProtocolFailure() {
                 this.print('<span style="color:#f00">检测到未授权访问!</span>');
-                await this.typeEffect('启动应急协议...');
-                this.print('通知国际核武监督组织');
-                this.print('擦除系统日志...');
+                await this.typeEffect('激活应急协议...');
+                this.print('警报已发送至国家安全委员会');
+                this.print('清除系统日志...');
                 this.inputField.disabled = true;
-                this.inputField.placeholder = '系统已锁定 (刷新页面重启)';
+                this.inputField.placeholder = '系统永久锁定';
                 this.container.classList.add('system-locked');
             }
 
@@ -202,7 +304,6 @@
                 const input = this.inputField.value;
                 if (!input || input.length !== 8) return;
 
-                // 密码验证逻辑
                 if (input === '20251111') {
                     this.handleCorrectPassword();
                     return;
@@ -213,7 +314,7 @@
                 this.print(`验证代码: ${maskedInput}`);
 
                 setTimeout(() => {
-                    this.print('<span style="color:#f00">错误: 无效的模拟凭证</span>');
+                    this.print('<span style="color:#f00">错误: 无效的访问凭证</span>');
                     this.inputField.value = '';
 
                     if (this.attempts >= this.maxAttempts) {
@@ -225,30 +326,101 @@
             }
 
             handleCorrectPassword() {
-                this.print('<span style="color:#0f0">访问凭证验证通过!</span>');
-                this.delayedPrint('加载安全协议...', 500);
-                this.delayedPrint('解密战略防御系统...', 1000);
+                this.print('<span style="color:#0f0">生物特征验证通过</span>');
+                this.delayedPrint('解密战略数据库...', 500);
+                this.delayedPrint('加载全球监控系统...', 1000);
                 
                 setTimeout(() => {
                     this.warningHeader.classList.add('hidden');
                     this.inputInterface.classList.add('hidden');
                     this.launchInterface.style.display = 'block';
-                    this.launchBtn.addEventListener('click', () => this.initiateLaunchSequence());
                 }, 1500);
             }
 
+            initWeaponButtons() {
+                this.weapons.forEach(weapon => {
+                    const btn = document.createElement('button');
+                    btn.className = 'weapon-btn';
+                    btn.innerHTML = `${weapon.code}<br><small>${weapon.name}</small>`;
+                    btn.addEventListener('click', () => this.selectWeapon(weapon));
+                    this.weaponPanel.appendChild(btn);
+                });
+            }
+
+            selectWeapon(weapon) {
+                this.print(`<span style="color:#0f0">选择武器系统：${weapon.code}</span>`);
+                this.currentWeapon = weapon;
+                this.enableTargetSelection();
+            }
+
+            enableTargetSelection() {
+                this.worldMap.style.cursor = 'crosshair';
+                this.worldMap.onclick = (e) => this.setTarget(e);
+            }
+
+            setTarget(e) {
+                const rect = this.worldMap.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 50;
+                
+                this.worldMap.innerHTML = '';
+                const marker = document.createElement('div');
+                marker.className = 'target-marker';
+                marker.style.left = `${x}%`;
+                marker.style.top = `${y}%`;
+                this.worldMap.appendChild(marker);
+
+                this.print(`<span style="color:#f00">目标锁定：${x.toFixed(1)}°N ${y.toFixed(1)}°E</span>`);
+                this.delayedPrint('计算弹道轨迹...', 500);
+                this.delayedPrint('输入最终确认代码 > ', 1000);
+                this.showFinalConfirm();
+            }
+
+            showFinalConfirm() {
+                this.finalConfirm.style.display = 'block';
+                this.finalPassword.focus();
+            }
+
+            confirmLaunch() {
+                if (this.finalPassword.value === '20251111') {
+                    this.executeLaunch();
+                } else {
+                    alert('最终授权密码错误');
+                    this.finalPassword.value = '';
+                }
+            }
+
+            cancelLaunch() {
+                this.finalConfirm.style.display = 'none';
+                this.print('<span style="color:#ff0">发射序列已取消</span>');
+            }
+
+            executeLaunch() {
+                this.finalConfirm.style.display = 'none';
+                this.print('<span style="color:#f00">!!! 最终发射确认 !!!</span>');
+                this.delayedPrint('激活发射协议...', 500);
+                this.delayedPrint('解除安全锁...', 1000);
+                this.delayedPrint('3... 2... 1...', 1500);
+                this.delayedPrint('<span style="color:#f00">导弹已发射</span>', 2000);
+            }
+
             initiateLaunchSequence() {
-                this.launchInterface.innerHTML = '';
-                this.print('<span style="color:#0ff">启动战略防御协议...</span>');
-                this.delayedPrint('激活指挥链路...', 500);
-                this.delayedPrint('核弹发射井状态：<span style="color:#0f0">在线</span>', 1000);
-                this.delayedPrint('卫星定位系统：<span style="color:#0f0">已同步</span>', 1500);
-                this.delayedPrint('最后确认：<span style="color:#ff0">所有系统已同步</span>', 2000);
+                this.launchInterface.style.display = 'none';
+                this.strategicInterface.style.display = 'block';
+                
+                this.print('<span style="color:#0ff">战略指挥系统激活</span>');
+                this.delayedPrint('同步卫星定位数据...', 500);
+                this.delayedPrint('激活全球通信链路...', 1000);
+                this.delayedPrint('所有武器系统：<span style="color:#0f0">就绪</span>', 1500);
             }
         }
 
         // 初始化应用
-        new SimulationApp();
+        const app = new SimulationApp();
+
+        // 全局函数绑定
+        function confirmLaunch() { app.confirmLaunch(); }
+        function cancelLaunch() { app.cancelLaunch(); }
     </script>
 </body>
 </html>

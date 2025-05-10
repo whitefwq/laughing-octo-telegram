@@ -2,412 +2,253 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>流浪地球个人终端</title>
-    <!-- 引入 Font Awesome 图标库 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>自我防御协议●2025</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Arial, sans-serif;
+        :root {
+            --terminal-green: #00ff00;
+            --alert-red: #ff0033;
         }
 
         body {
-            background-color: #0a192f;
-            color: #ccd6f6;
-            line-height: 1.6;
+            background: #000;
+            color: var(--terminal-green);
+            font-family: 'Courier New', monospace;
+            margin: 0;
+            padding: 10px;
+            min-height: 100vh;
             overflow-x: hidden;
-            position: relative;
-        }
-
-        /* 太空背景 */
-        .space-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
-        }
-
-        /* 星星效果 */
-        .stars {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
-        .stars::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3CradialGradient id='stars-gradient' cx='50%25' cy='50%25' r='50%25' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0%25' stop-color='%231B2735'/%3E%3Cstop offset='100%25' stop-color='%23090A0F'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23stars-gradient)'/%3E%3C/svg%3E");
-            opacity: 0.8;
-        }
-
-        @keyframes twinkle {
-            0% { opacity: 0.2; }
-            50% { opacity: 1; }
-            100% { opacity: 0.2; }
-        }
-
-        .star {
-            position: absolute;
-            background-color: white;
-            border-radius: 50%;
-            animation: twinkle 3s infinite ease-in-out;
         }
 
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        /* 导航样式 */
-        nav {
-            background-color: rgba(10, 25, 47, 0.85);
-            padding: 1rem;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            backdrop-filter: blur(10px);
-            z-index: 100;
-            border-bottom: 1px solid rgba(100, 255, 218, 0.2);
-        }
-
-        nav ul {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            list-style: none;
-        }
-
-        nav a {
-            color: #64ffda;
-            text-decoration: none;
-            font-size: 1.1rem;
-            position: relative;
-            padding: 0.5rem 0;
-        }
-
-        nav a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: 0;
-            left: 0;
-            background-color: #64ffda;
-            transition: width 0.3s ease;
-        }
-
-        nav a:hover::after {
-            width: 100%;
-        }
-
-        /* 内容区块 */
-        section {
-            padding: 6rem 0;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-        }
-
-        /* 简介部分 */
-        #intro {
-            text-align: center;
-            position: relative;
-        }
-
-        #intro h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(90deg, #64ffda, #4b9fe0);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 10px rgba(100, 255, 218, 0.3);
-        }
-
-        #intro p {
-            margin-top: 1.5rem;
             max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            font-size: 1.1rem;
-            line-height: 1.8;
-            position: relative;
-            padding: 1.5rem;
-            background: rgba(17, 34, 64, 0.5);
-            border-radius: 8px;
-            border: 1px solid rgba(100, 255, 218, 0.2);
-            box-shadow: 0 0 20px rgba(100, 255, 218, 0.1);
-            backdrop-filter: blur(5px);
-        }
-
-        /* 地球图标 */
-        .earth-icon {
-            width: 150px;
-            height: 150px;
-            margin: 2rem auto;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%23112440"/><path d="M50,5 A45,45 0 0,1 95,50 A45,45 0 0,1 50,95 A45,45 0 0,1 5,50 A45,45 0 0,1 50,5 Z" fill="none" stroke="%2364ffda" stroke-width="1"/><path d="M50,5 A45,45 0 0,0 5,50 A45,45 0 0,0 50,95 A45,45 0 0,0 95,50 A45,45 0 0,0 50,5 Z" fill="none" stroke="%2364ffda" stroke-width="1"/><circle cx="50" cy="50" r="40" fill="%231B2735"/><path d="M30,20 Q50,15 70,30 T90,70 Q85,50 70,30 T30,20 Z" fill="%2364ffda" opacity="0.3"/></svg>');
-            background-size: contain;
-            animation: rotate 20s linear infinite;
-            position: relative;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* 制作团队 */
-        #team {
-            position: relative;
-        }
-
-        #team h2 {
-            text-align: center;
-            margin-bottom: 2rem;
-            font-size: 2.5rem;
-            color: #64ffda;
-        }
-
-        .team-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .team-member {
-            background: rgba(17, 34, 64, 0.7);
-            padding: 2rem;
-            border-radius: 8px;
-            text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid rgba(100, 255, 218, 0.2);
-            backdrop-filter: blur(5px);
-        }
-
-        .team-member:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(100, 255, 218, 0.2);
-        }
-
-        .team-member h3 {
-            color: #64ffda;
-            margin-bottom: 0.5rem;
-            font-size: 1.5rem;
-        }
-
-        .team-member p {
-            color: #ccd6f6;
-            opacity: 0.8;
-        }
-
-        /* 下载区域 */
-        #download {
-            text-align: center;
-            position: relative;
-        }
-
-        #download h2 {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            color: #64ffda;
-        }
-
-        .download-section {
-            max-width: 800px;
             margin: 0 auto;
-            padding: 2rem;
-            background: rgba(17, 34, 64, 0.7);
-            border-radius: 8px;
-            border: 1px solid rgba(100, 255, 218, 0.2);
-            box-shadow: 0 0 30px rgba(100, 255, 218, 0.1);
-            backdrop-filter: blur(5px);
         }
 
-        .download-btn {
-            display: inline-block;
-            background-color: rgba(100, 255, 218, 0.1);
-            color: #64ffda;
-            padding: 1rem 2rem;
-            margin: 1rem;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            border: 1px solid #64ffda;
-            min-width: 200px;
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--alert-red);
+            margin-right: 8px;
+            animation: pulse 1.5s infinite;
         }
 
-        .download-btn:hover {
-            transform: translateY(-5px);
-            background-color: rgba(100, 255, 218, 0.3);
-            box-shadow: 0 5px 15px rgba(100, 255, 218, 0.3);
+        @keyframes pulse {
+            0% { opacity: 0.3; }
+            50% { opacity: 1; }
+            100% { opacity: 0.3; }
         }
 
-        /* 行星发动机背景 */
-        .engine-bg {
-            position: absolute;
-            bottom: 0;
-            left: 0;
+        .console-output {
+            border: 1px solid #333;
+            padding: 15px;
+            margin: 20px 0;
+            min-height: 200px;
+            overflow-y: hidden;
+        }
+
+        .console-line {
+            margin: 5px 0;
+            opacity: 0;
+            animation: fadeIn 0.3s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        input {
+            background: #001100;
+            border: 1px solid var(--terminal-green);
+            color: var(--terminal-green);
+            padding: 12px;
             width: 100%;
-            height: 200px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" fill="%2364ffda"/><path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" fill="%2364ffda"/><path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,233.28-64.61V0Z" fill="%2364ffda"/></svg>');
-            background-size: cover;
-            z-index: -1;
-            opacity: 0.3;
+            margin: 10px 0;
+            transition: all 0.3s;
         }
 
-        /* 版权声明 */
-        footer {
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 8px var(--terminal-green);
+        }
+
+        .warning {
+            color: var(--alert-red);
             text-align: center;
-            padding: 3rem;
-            background-color: rgba(2, 12, 27, 0.8);
-            position: relative;
-            border-top: 1px solid rgba(100, 255, 218, 0.2);
-            backdrop-filter: blur(5px);
+            margin: 20px 0;
         }
 
-        footer p {
-            margin: 0.5rem 0;
-            color: #8892b0;
-            font-size: 0.9rem;
+        .system-locked {
+            filter: brightness(0.7);
+            pointer-events: none;
         }
 
-        /* 响应式设计 */
-        @media (max-width: 768px) {
-            nav ul {
-                gap: 1rem;
-            }
-            
-            #intro h1 {
-                font-size: 2.5rem;
-            }
-            
-            .team-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .download-btn {
-                display: block;
-                margin: 1rem auto;
-            }
+        .launch-interface {
+            display: none;
+            text-align: center;
+        }
+
+        .launch-button {
+            background: #002200;
+            border: 2px solid var(--terminal-green);
+            color: var(--terminal-green);
+            padding: 15px 30px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 20px 0;
+        }
+
+        .launch-button:hover {
+            background: #004400;
+            box-shadow: 0 0 15px var(--terminal-green);
+        }
+
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
-    <!-- 太空背景 -->
-    <div class="space-bg"></div>
-    <div class="stars" id="stars"></div>
-    
-    <!-- 行星发动机背景 -->
-    <div class="engine-bg"></div>
-
-    <nav>
-        <ul>
-            <li><a href="#intro"><i class="fas fa-info-circle"></i> 简介</a></li>
-            <li><a href="#team"><i class="fas fa-users"></i> 制作团队</a></li>
-            <li><a href="#download"><i class="fas fa-download"></i> 下载</a></li>
-        </ul>
-    </nav>
-
     <div class="container">
-        <section id="intro">
-            <div>
-                <h1>流浪地球<br>个人终端</h1>
-                <div class="earth-icon"></div>
-                <p>
-                    这是为行星发动机工作人员设计的便携式智能终端，集成通讯、导航、生命维持系统监控等核心功能。
-                    在2500年的漫长征程中，它是每位领航员最可靠的伙伴。
-                </p>
-            </div>
-        </section>
+        <div class="warning" id="warningHeader">
+            <div class="status-indicator"></div>
+            <h2>防御协议系统 V2.2</h2>
+            <p>⚠️ 禁止随便使用 ⚠️</p>
+        </div>
         
-                <h2>制作团队</h2>
-                <div class="team-grid">
-                    <div class="team-member">
-                        <h3><i class="fas fa-user-astronaut"></i> 小不点大白</h3>
-                        <p>终端制作</p>
-                    </div>
-                    <div class="team-member">
-                        <h3><i class="fas fa-paint-brush"></i> HU创想工作室</h3>
-                        <p>网站设计</p>
-                    </div>
-                    <div class="team-member">
-                        <h3><i class="fas fa-robot"></i> MOSS</h3>
-                        <p>人工智能系统</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <div class="console-output" id="console"></div>
 
-        <section id="download">
-            <div class="download-section">
-                <h2><i class="fas fa-cloud-download-alt"></i> 下载客户端</h2>
-                <a href="#" class="download-btn"><i class="fab fa-windows"></i> Windows 版本(暂未推出)</a>
-                <a href="#" class="download-btn"><i class="fab fa-android"></i> Android 版本</a>
-                <a href="#" class="download-btn"><i class="fab fa-apple"></i> iOS 版本(暂未推出)</a>
-            </div>
-        </section>
+        <div id="inputInterface">
+            <input type="password" id="inputField" 
+                   placeholder="输入验证码 (8位)" 
+                   maxlength="8">
+        </div>
+
+        <div class="launch-interface" id="launchInterface">
+            <button class="launch-button" id="launchBtn">启动战略防御系统</button>
+            <p>授权级别：Ω级</p>
+            <p>验证状态：<span style="color:#0f0">已确认</span></p>
+        </div>
     </div>
 
-    <footer>
-        <p><i class="far fa-copyright"></i> 2075 流浪地球计划联合政府</p>
-        <p>本终端仅供学习，最终解释权归终端运行团队所有</p>
-    </footer>
-
     <script>
-        // 创建星星效果
-        function createStars() {
-            const starsContainer = document.getElementById('stars');
-            const starCount = 200;
-            
-            for (let i = 0; i < starCount; i++) {
-                const star = document.createElement('div');
-                star.classList.add('star');
+        class SimulationApp {
+            constructor() {
+                this.attempts = 0;
+                this.maxAttempts = 2;
+                this.console = document.getElementById('console');
+                this.inputField = document.getElementById('inputField');
+                this.container = document.querySelector('.container');
+                this.warningHeader = document.getElementById('warningHeader');
+                this.inputInterface = document.getElementById('inputInterface');
+                this.launchInterface = document.getElementById('launchInterface');
+                this.launchBtn = document.getElementById('launchBtn');
+                this.initEventListeners();
+                this.bootSequence();
+            }
+
+            initEventListeners() {
+                this.inputField.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        this.handleValidation();
+                    }
+                });
+            }
+
+            bootSequence() {
+                this.print('<span class="console-line">初始化安全协议...</span>');
+                this.delayedPrint('正在验证国际安全证书...', 1000);
+                this.delayedPrint('连接指挥网络...', 2000);
+                this.delayedPrint('当前状态: <span style="color:#ff0">DEFCON 5</span>', 3000);
+            }
+
+            print(text) {
+                const div = document.createElement('div');
+                div.className = 'console-line';
+                div.innerHTML = text;
+                this.console.appendChild(div);
+                this.console.scrollTop = this.console.scrollHeight;
+            }
+
+            delayedPrint(text, delay) {
+                setTimeout(() => this.print(text), delay);
+            }
+
+            async simulateProtocolFailure() {
+                this.print('<span style="color:#f00">检测到未授权访问!</span>');
+                await this.typeEffect('启动应急协议...');
+                this.print('通知国际核武监督组织');
+                this.print('擦除系统日志...');
+                this.inputField.disabled = true;
+                this.inputField.placeholder = '系统已锁定 (刷新页面重启)';
+                this.container.classList.add('system-locked');
+            }
+
+            async typeEffect(text) {
+                const element = document.createElement('div');
+                element.className = 'console-line';
+                this.console.appendChild(element);
                 
-                // 随机大小
-                const size = Math.random() * 3;
-                star.style.width = `${size}px`;
-                star.style.height = `${size}px`;
+                for (let i = 0; i < text.length; i++) {
+                    await new Promise(resolve => setTimeout(resolve, 30));
+                    element.innerHTML = text.substring(0, i+1);
+                }
+            }
+
+            handleValidation() {
+                const input = this.inputField.value;
+                if (!input || input.length !== 8) return;
+
+                // 密码验证逻辑
+                if (input === '20251111') {
+                    this.handleCorrectPassword();
+                    return;
+                }
+
+                this.attempts++;
+                const maskedInput = input.replace(/./g, '•');
+                this.print(`验证代码: ${maskedInput}`);
+
+                setTimeout(() => {
+                    this.print('<span style="color:#f00">错误: 无效的模拟凭证</span>');
+                    this.inputField.value = '';
+
+                    if (this.attempts >= this.maxAttempts) {
+                        this.simulateProtocolFailure();
+                    } else {
+                        this.print(`剩余尝试次数: ${this.maxAttempts - this.attempts}`);
+                    }
+                }, 800);
+            }
+
+            handleCorrectPassword() {
+                this.print('<span style="color:#0f0">访问凭证验证通过!</span>');
+                this.delayedPrint('加载安全协议...', 500);
+                this.delayedPrint('解密战略防御系统...', 1000);
                 
-                // 随机位置
-                star.style.left = `${Math.random() * 100}%`;
-                star.style.top = `${Math.random() * 100}%`;
-                
-                // 随机闪烁延迟
-                star.style.animationDelay = `${Math.random() * 5}s`;
-                
-                starsContainer.appendChild(star);
+                setTimeout(() => {
+                    this.warningHeader.classList.add('hidden');
+                    this.inputInterface.classList.add('hidden');
+                    this.launchInterface.style.display = 'block';
+                    this.launchBtn.addEventListener('click', () => this.initiateLaunchSequence());
+                }, 1500);
+            }
+
+            initiateLaunchSequence() {
+                this.launchInterface.innerHTML = '';
+                this.print('<span style="color:#0ff">启动战略防御协议...</span>');
+                this.delayedPrint('激活指挥链路...', 500);
+                this.delayedPrint('核弹发射井状态：<span style="color:#0f0">在线</span>', 1000);
+                this.delayedPrint('卫星定位系统：<span style="color:#0f0">已同步</span>', 1500);
+                this.delayedPrint('最后确认：<span style="color:#ff0">所有系统已同步</span>', 2000);
             }
         }
-        
-        // 平滑滚动效果
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
-        
-        // 页面加载时创建星星
-        window.addEventListener('load', createStars);
+
+        // 初始化应用
+        new SimulationApp();
     </script>
 </body>
 </html>
